@@ -24,7 +24,35 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
 
-
+  float sensorValue, GasSensorPin;
+  sensorValue = analogRead(GasSensorPin); 
+  
+  float distanceValue, DistanceSensorPin;
+  distanceValue = analogRead(DistanceSensorPin);
+  
+  if(sensorValue >= 100){
+    digitalWrite(LED, HIGH);
+    Serial.print(sensorValue);
+    Serial.println(" | SMOKE DETECTED");
+  } 
+  else {
+  	digitalWrite(LED,LOW);
+    Serial.println("Sensor Value: ");
+    Serial.println(sensorValue);
+  } 
+  
+  
+  if(distanceValue >= 1){
+    digitalWrite(LED, HIGH);
+    Serial.print(distanceValue);
+    Serial.println(" | distance found");
+  } 
+  else {
+  	digitalWrite(LED,LOW);
+    Serial.println("Sensor Value: ");
+    Serial.println(distanceValue);
+  } 
+  
   duration_us = pulseIn(ECHO_PIN, HIGH);
 
   distance_cm = 0.017 * duration_us;
@@ -33,10 +61,7 @@ void loop() {
     servo.write(90);
   else
     servo.write(0);
+  delay(5000);
 
-  Serial.print("distance: ");
-  Serial.print(distance_cm);
-  Serial.println(" cm");
 
-  delay(500);
 }
