@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Recycler</title>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"> </script>
+
+
+    </head>
+    <body>
+        <h1>Recycle Classifier </h1>
+        <p style = 'margin: auto'>
+            <img src="" id="current"  width="222" height="222">
+        </p>
+        <button> Upload Image </button>
+        <input type="file" id="my_file" style="display: none;" />
+        <h2 id="outcome"> No Result Yet</h2>
+    </body>
+    <script>
+        $("button").click(function() {
+            $("input[id='my_file']").click();
+        });
+
+        $("input[id='my_file']").change(function () {
+            var imgs = $("input[id='my_file']").get(0).files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(imgs);
+            reader.onload = function(e){
+                $("#current").attr("src",this.result)
+            }
+            var formData = new FormData();
+            formData.append('image', imgs);
+            $.ajax({
+                type: 'POST',
+                url: '/Con',
+                data: formData,
+                contentType:false,
+                processData:false,
+                dataType: 'json',
+                success: function (data) {
+                    if(data.pred > 0.5)
+                        $("#outcome").html("Recycble")
+                    else
+                        $("#outcome").html("Non-Recycble")
+                    console.log(data);
+                },
+                error: function (xhr,textStatus,errorThrown) {
+                    console.log(textStatus)
+                    console.log(errorThrown)
+                }
+            });
+        });
+    </script>
+</html>
